@@ -11,6 +11,8 @@ module.exports = function(config) {
       // libraries
       'bower_components/angular/angular.js',
       'bower_components/angular-mocks/angular-mocks.js',
+      'bower_components/elastic.js/dist/elastic.js',
+      'bower_components/elastic.js/dist/elastic-angular-client.js',
 
       // directive
       'bz-model.src.js',

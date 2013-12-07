@@ -1,13 +1,3 @@
-(function(angular, factory) {
-    if (typeof define === 'function' && define.amd) {
-        define(['angular'], function(angular) {
-            return factory(angular);
-        });
-    } else {
-        return factory(angular);
-    }
-}(angular || null, function(angular) {
-var app = angular.module('bzModel', ['elasticjs.service']);
 app.provider('bzModel', [function() {
     var self = this;
 
@@ -160,6 +150,3 @@ app.provider('bzModel', [function() {
         }
     }];
 }]);
-
-    return app;
-}));
