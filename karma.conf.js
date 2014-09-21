@@ -15,11 +15,11 @@ module.exports = function(config) {
       'bower_components/angular-mocks/angular-mocks.js',
 
       // directive
-      //'bz-model.src.js',
-      'src/scripts/02-app.js',
+      'bz-model.src.js',
+      /*'src/scripts/02-app.js',
       'src/scripts/03-bzModel.js',
       'src/scripts/04-bzModelResource.js',
-      'src/scripts/05-bzModelElastic.js',
+      'src/scripts/05-bzModelElastic.js',*/
 
       // tests
       'test/*.js'
