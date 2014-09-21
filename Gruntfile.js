@@ -2,7 +2,7 @@ module.exports = function(grunt) {
     grunt.initConfig({
         cmpnt: grunt.file.readJSON('bower.json'),
         banner: '/*! bzModel v<%= cmpnt.version %> by Vitalii Savchuk(esvit666@gmail.com) - ' +
-                'https://github.com/esvit/bz-model - New BSD License */\n',
+                'https://github.com/esvit/bz-model - New BSD License */',
         clean: {
             working: {
                 src: ['bz-model.*', './.temp/views', './.temp/']
