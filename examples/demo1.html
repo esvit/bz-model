@@ -9,121 +9,95 @@
         <meta name="viewport" content="width=device-width">
 
         <link rel="stylesheet" href="css/bootstrap.css">
-        <!--[if lt IE 9]>
-        <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
-        <![endif]-->
         <script src="../bower_components/angular/angular.js"></script>
-        <script src="../bower_components/elastic.js/dist/elastic.js"></script>
-        <script src="../bower_components/elastic.js/dist/elastic-angular-client.js"></script>
-        <script src="js/ng-table.js"></script>
-        <script src="js/regions.js"></script>
-        <script src="js/categories.js"></script>
+        <script src="../bower_components/angular-resource/angular-resource.js"></script>
+        <script src="../bower_components/elasticsearch/elasticsearch.angular.js"></script>
         <script src="../src/scripts/02-app.js"></script>
         <script src="../src/scripts/03-bzModel.js"></script>
+        <script src="../src/scripts/04-bzModelResource.js"></script>
+        <script src="../src/scripts/05-bzModelElastic.js"></script>
     </head>
 <body ng-app="main">
-<h1>Table with pagination</h1>
 
-<div ng-controller="DemoCtrl">
+    <div ng-controller="DemoCtrl">
 
-    <div class="row">
-        <div class="col col-xs-6">
-            <select class="form-control" multiple size="10" ng-model="filter.region_id" ng-options="value.id as value.title for value in regions"></select>
-        </div>
-        <div class="col col-xs-6">
-            <select class="form-control" multiple size="10" ng-model="filter.category_id" ng-options="key as value.title group by value.group.title for (key, value) in categories"></select>
-        </div>
+        {{result.getUser()}}
+
     </div>
 
-    <table class="table" ng-table="tableParams">
-    <tr ng-repeat="item in $data">
-        <td data-title="'Title'">{{item.title}}</td>
-        <td data-title="'Category'">{{item.getCategory().title}}</td>
-        <td>{{item.createdAt()}}</td>
-    </tr>
-    <table>
-
         <script>
-        var app = angular.module('main', ['bzModel', 'ngTable', 'news.categories', 'news.regions']).
-        config(function(bzModelProvider) {
-            bzModelProvider.url('http://news.mistinfo.com')
-                           .index('news.mistinfo.com');
-        }).
-        run(function($rootScope, newsCategories, newsRegions) {
-            var categories = {};
-
-            angular.forEach(newsCategories, function(value) {
-                if (!value.categories) {
-                    categories[parseInt(value.id)] = value;
-                } else {
-                    angular.forEach(value.categories, function(item) {
-                        item.group = value;
-                        categories[parseInt(item.id)] = item;
-                    });
-                }
+        var app = angular.module('main', ['bzModel', 'bzModelResource', 'bzModelElastic'])
+        .service('esClient', function(esFactory) {
+            return esFactory({
+                host: 'http://bershad.5starsmedia.com.ua'
+                //log: 'trace'
+            });
+        })
+        .factory('User', function(bzModel, bzModelResource, $resource, bzModelElastic, esClient) {
+            var resource = $resource('test/:id.json', {
+                'id': '@id'
             });
 
-            $rootScope.categories = categories;
-            $rootScope.regions = newsRegions;
-        }).
-        factory('NewsItem', function(bzModel, $filter, $rootScope) {
-            var dateFilter = $filter('date');
-            
             return new bzModel({
-                $name: 'com_news_news',
                 $defaults: {
-                    id: 1,
-                    title: 'Untitled',
-                    estimate: ''
+                    login: 'test'
                 },
                 $initialize: function() {
-                    this.one = 1;
+                    this.password = 'awdawd';
                 },
-                getId: function() {
-                    return this.id;
-                },
-                getCategory: function() {
-                    return $rootScope.categories[parseInt(this.category_id)];
-                },
-                createdAt: function(format) {
-                    this._createdAt = this._createdAt || dateFilter(this.created_at, format || 'medium');
-                    return this._createdAt;
+                getLogin: function() {
+                    return this.login;
                 }
-            });
-        }).
-        controller('DemoCtrl', function($scope, NewsItem, ngTableParams, newsCategories) {
-            var model = new NewsItem();
-
-            $scope.newsCategories = newsCategories;
-
-            $scope.tableParams = new ngTableParams({
-                page: 1,
-                count: 10
-            }, {
-                getData: function($defer, params) {
-                
-                    model.$search($scope.filter)
-                         .$execute({
-                                page: params.page(),
-                                count: params.count(),
-                                sorting: {
-                                    'top_expiration_date': 'desc'
-                                }
-                            }).$promise.then(function(res) {
-                                params.total(res.$total);
-
-                                $defer.resolve(res);
-                            });
+            }, new bzModelResource(resource), new bzModelElastic(esClient,
+                    'es_bershad_5starsmedia_com_ua',
+                    'cms_users'
+            ));
+        })
+        .factory('Cluster', function(bzModel, bzModelResource, bzModelElastic, esClient, User) {
+            return new bzModel({
+                $defaults: {
+                  //  login: 'test'
+                },
+                $initialize: function() {
+                    //this.password = 'awdawd';
+                },
+                getUser: function() {
+                    if (angular.isUndefined(this.user_id)) {
+                        return;
+                    }
+                    if (this.$user) {
+                        return this.$user;
+                    }
+                    return this.$user = User.getById(this.user_id);
                 }
+            }, new bzModelElastic(esClient,
+                'es_bershad_5starsmedia_com_ua',
+                'com_news_posts'
+            ));
+        })
+        .controller('DemoCtrl', function($scope, User, Cluster) {
+
+            var cl = new Cluster();
+            /*$scope.result = cl.getState(function(data) {
+                //console.info(data)
+            });*/
+            $scope.result = Cluster.getById(189874);
+            //$scope.result = User.getById(44);
+            return;
+
+            var user = new User();
+            user.id = 1;
+
+            user.$get(function(user) {
+                console.info(user)
+
+                user.$save();
             });
-            
-            $scope.$watch('filter', function() {
-                $scope.tableParams.reload();
-            }, true);
+            /*User.query(function(users) {
+                console.info(users)
+            });*/
         })
         </script>
-
-</div>
 
 
     </body>

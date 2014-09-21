@@ -8,18 +8,19 @@
     "url": "git://github.com/esvit/bz-model.git"
   },
   "devDependencies": {
-    "grunt-contrib-copy": "~0.4.1",
+    "coveralls": "",
+    "grunt": "~0.4.1",
     "grunt-contrib-clean": "~0.4.0",
     "grunt-contrib-concat": "~0.3.0",
+    "grunt-contrib-copy": "~0.4.1",
     "grunt-contrib-requirejs": "~0.4.0",
     "grunt-contrib-uglify": "~0.2.1",
-    "grunt": "~0.4.1",
-    "karma-jasmine": "*",
+    "grunt-karma": "^0.9.0",
     "karma-chrome-launcher": "*",
+    "karma-coverage": "~0.1.0",
     "karma-firefox-launcher": "*",
-    "karma-ng-html2js-preprocessor": "*",
-    "coveralls": "",
-    "karma-coverage": "~0.1.0"
+    "karma-jasmine": "*",
+    "karma-ng-html2js-preprocessor": "*"
   },
   "scripts": {
     "test": "karma start --single-run --no-auto-watch"

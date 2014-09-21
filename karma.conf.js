@@ -10,12 +10,16 @@ module.exports = function(config) {
     files: [
       // libraries
       'bower_components/angular/angular.js',
+      'bower_components/angular-resource/angular-resource.js',
+      'bower_components/elasticsearch/elasticsearch.angular.js',
       'bower_components/angular-mocks/angular-mocks.js',
-      'bower_components/elastic.js/dist/elastic.js',
-      'bower_components/elastic.js/dist/elastic-angular-client.js',
 
       // directive
-      'bz-model.src.js',
+      //'bz-model.src.js',
+      'src/scripts/02-app.js',
+      'src/scripts/03-bzModel.js',
+      'src/scripts/04-bzModelResource.js',
+      'src/scripts/05-bzModelElastic.js',
 
       // tests
       'test/*.js'
@@ -31,7 +35,7 @@ module.exports = function(config) {
     reporters: ['progress', 'coverage'],
 
     autoWatch: true,
-    browsers: ['PhantomJS'],
+    browsers: ['Chrome'],
     coverageReporter: {
         type: 'lcov',
         dir : 'out/coverage'
