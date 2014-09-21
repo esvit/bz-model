@@ -1,6 +1,6 @@
 bzModel
 =================
-[![Build Status](https://travis-ci.org/esvit/bz-model.png)](https://travis-ci.org/esvit/bz-model) [![Coverage Status](https://coveralls.io/repos/esvit/bz-model/badge.png)](https://coveralls.io/r/esvit/bz-model) [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/esvit/bz-model/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+[![Build Status](https://travis-ci.org/esvit/bz-model.png)](https://travis-ci.org/esvit/bz-model) [![Coverage Status](https://coveralls.io/repos/esvit/bz-model/badge.png)](https://coveralls.io/r/esvit/bz-model)
 
 Code licensed under New BSD License.
 
