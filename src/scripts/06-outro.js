@@ -1,2 +1,2 @@
-    return app;
+    return bzModelApp;
 }));

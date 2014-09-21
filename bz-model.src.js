@@ -219,5 +219,5 @@ bzModelElasticApp.factory('bzModelElastic', function() {
     return bzModelElastic;
 });
 
-    return app;
+    return bzModelApp;
 }));
